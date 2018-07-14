@@ -1,0 +1,3 @@
+[submodule "branstock"]
+	path = branstock
+	url = https://github.com/kalorie/branstock.git

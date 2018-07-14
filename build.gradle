@@ -1,0 +1,40 @@
+buildscript {
+    ext {
+        springBootVersion = "2.0.2.RELEASE"
+    }
+
+    apply from: file("branstock/repositories.gradle")
+    apply from: file("branstock/java.gradle")
+    apply from: file("branstock/maven.gradle")
+
+    repositories artifactory
+
+    dependencies {
+        classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:0.9.3"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+apply plugin: 'com.google.cloud.tools.jib'
+apply plugin: "org.springframework.boot"
+
+group "io.klr.ci"
+version "1.0-SNAPSHOT"
+
+repositories artifactory
+
+configurations {
+    all*.exclude module: 'android-json'
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}"
+    testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    compile "org.json:json:20180130"
+}
+
+bootJar {
+    launchScript()
+}
