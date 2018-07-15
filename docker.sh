@@ -21,8 +21,8 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "*** Tag and push docker images ***"
-docker tag $project:$tag 192.168.0.220:7899/kingyea/$project:$tag
-docker push 192.168.0.220:7899/kingyea/$project:$tag
+docker tag $project:$tag 192.168.0.20:7899/$project:$tag
+docker push 192.168.0.20:7899/$project:$tag
 
 if [ $? -ne 0 ]; then
     echo "Failed to push docker image"
