@@ -1,6 +1,7 @@
 buildscript {
     ext {
-        springBootVersion = "2.0.2.RELEASE"
+        springBootVersion = "2.0.3.RELEASE"
+        flywayVersion = "5.1.4"
     }
 
     apply from: file("branstock/repositories.gradle")
@@ -10,31 +11,51 @@ buildscript {
     repositories artifactory
 
     dependencies {
-        classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:0.9.3"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "org.flywaydb:flyway-gradle-plugin:${flywayVersion}"
     }
 }
 
-apply plugin: 'com.google.cloud.tools.jib'
 apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
+apply plugin: "org.flywaydb.flyway"
 
 group "io.klr.ci"
 version "1.0-SNAPSHOT"
 
 repositories artifactory
 
-configurations {
-    all*.exclude module: 'android-json'
+dependencies {
+    compile "org.springframework.boot:spring-boot-devtools"
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-jdbc"
+    compile "org.flywaydb:flyway-core:${flywayVersion}"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    runtime "mysql:mysql-connector-java:5.1.46"
 }
 
-dependencies {
-    compile "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
-    compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-    compile "org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}"
-    testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
-    compile "org.json:json:20180130"
+processResources {
+    def profile = System.properties."spring.profiles.active"
+    switch (profile) {
+        case "local":
+            exclude "**/*-integration-test.properties"
+            exclude "**/application.properties"
+            break
+        case "integration-test":
+            exclude "**/*-local.properties"
+            exclude "**/application.properties"
+            break
+        default:
+            exclude "**/*-integration-test.properties"
+            exclude "**/*-local.properties"
+            break
+    }
 }
 
 bootJar {
     launchScript()
+}
+
+test {
+    systemProperty "spring.profiles.active", System.properties."spring.profiles.active"
 }
