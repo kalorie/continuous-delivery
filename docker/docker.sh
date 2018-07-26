@@ -13,7 +13,7 @@ ts=`date +%Y%m%d.%H%M%S`
 tag="${ts}_$hash"
 
 echo "*** Build docker images ***"
-docker build -t $project:$tag .
+docker build -t $project:$tag -f $WORKSPACE/docker/Dockerfile $WORKSPACE
 
 if [ $? -ne 0 ]; then
     echo "Failed to build docker image"
