@@ -38,5 +38,5 @@ if [ $? -ne 0 ]; then
     exit 4
 fi
 
-echo "*** Run the container ***"
-docker run --name $project -d -p 9000:8080 $project:$tag
+echo "*** Publish the service ***"
+# docker run --name $project -d -p 9000:8080 $project:$tag
