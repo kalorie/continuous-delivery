@@ -29,12 +29,15 @@ if [ $? -ne 0 ]; then
     exit 3
 fi
 
-echo "*** Push git tags ***"
+echo "*** Push git tag/tmp branch ***"
 git tag -a build-$tag -m "Built on $tag"
+git checkout -b br-$tag
+
 git push origin --tags
+git push origin br-$tag
 
 if [ $? -ne 0 ]; then
-    echo "Failed to push git tag"
+    echo "Failed to push git tag/tmp branch"
     exit 4
 fi
 
