@@ -1,9 +1,35 @@
-# 说明
+# 概述
 
-参考wiki：
+基于单一主干分支策略的CI验证项目，该项目仅有一个控制器，用于接受两个输入参数进行加法运算，然后将结果保存到MySQL数据库中。
 
-* [搭建Docker私有仓库](https://github.com/kalorie/continuous-delivery/wiki/01-%E6%90%AD%E5%BB%BADocker%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93)
+重点在于需要使用Docker，并结合Jenkins进行相关构建和测试，目标是每次代码提交将自动触发构建任务。
 
-* [使用容器进行集成测试](https://github.com/kalorie/continuous-delivery/wiki/02-%E4%BD%BF%E7%94%A8%E5%AE%B9%E5%99%A8%E8%BF%9B%E8%A1%8C%E9%9B%86%E6%88%90%E6%B5%8B%E8%AF%95)
+# 步骤
 
-* [Jenkins实现CI流程](https://github.com/kalorie/continuous-delivery/wiki/03-Jenkins%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0CI%E6%B5%81%E7%A8%8B)
+## 安装Gradle插件
+
+通过Jenkins的管理界面进行安装，或者运行Jenkins提供的`install-plugins.sh`脚本：
+
+```
+install-plugins.sh gradle
+```
+
+## Jenkinsfile
+
+在项目根目录下创建`Jenkinsfile`文件，内容如下所示：
+
+```groovy
+pipeline {
+    agent {
+        docker {
+            image gradle:5.4.1-jdk8-alpine
+        }
+    }
+
+    stages {
+        stage("Clone project") {
+            sh 'gradle --version'
+        }
+    }
+}
+```
