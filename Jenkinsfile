@@ -25,7 +25,7 @@ pipeline {
             agent {
                 docker {
                     image 'gradle-mysql:latest'
-                    args "-u root -v gradle-cache:/home/gradle/.gradle --network=host -e MYSQL_ROOT_PASSWORD=${env.ROOT_PASSWORD} -e MYSQL_DATABASE=${env.DATABASE}"
+                    args "-u root -v gradle-cache:/home/gradle/.gradle -p 3306:3306 --network=host -e MYSQL_ROOT_PASSWORD=${env.ROOT_PASSWORD} -e MYSQL_DATABASE=${env.DATABASE}"
                 }
             }
             steps {
