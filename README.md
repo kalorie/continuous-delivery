@@ -32,3 +32,6 @@ install-plugins.sh gradle
 在Blue Ocean中直接创建，选择Git或者GitHub输入相应仓库地址即可（需要包含`Jenkinsfile`文件）。
 
 ![create-pipeline-from-git](img/create-pipeline-from-git.png)
+
+## 触发构建
+
