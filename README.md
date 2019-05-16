@@ -29,6 +29,10 @@ install-plugins.sh gradle
 
 为了能够缓存Gradle数据，还需要增加参数`-v gradle-cache:/home/gradle/.gradle`。
 
+## 数据库网络设置
+
+默认情况下容器以`bridge`模式启动，其地址一般是`172.17.x.x`，通过虚拟网卡`docker0`访问，也可以通过`host`模式启动，那么容器地址就是主机地址。对于前者，显然不能继续以`localhost`访问，必须指定网络地址，但也必须考虑到多个流水线运行时避免地址冲突的问题；后者虽然可以直接使用`localhost`地址，但也需要注意多个流水线同时运行的问题，可以通过指定不同的端口分别访问。
+
 ## Jenkinsfile
 
 在项目根目录下创建`Jenkinsfile`文件，注意需要更新子模块。
