@@ -21,6 +21,7 @@ pipeline {
     stages {
         stage("Build") {
             steps {
+                sh "git submodule update --init"
                 sh 'gradle clean test -Dspring.profiles.active=local --info'
             }
         }

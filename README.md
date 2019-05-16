@@ -26,8 +26,11 @@ install-plugins.sh gradle
 
 ## Jenkinsfile
 
-在项目根目录下创建`Jenkinsfile`文件
+在项目根目录下创建`Jenkinsfile`文件，注意需要更新子模块。
 
+```
+git submodule update --init
+```
 
 ## 创建流水线
 
@@ -37,3 +40,6 @@ install-plugins.sh gradle
 
 ## 触发构建
 
+# 源代码更新
+
+实现流水线之后，源代码中原来针对不同环境的配置文件可以删除，如`integration-test`相关配置文件。
