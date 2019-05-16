@@ -20,7 +20,7 @@ install-plugins.sh gradle
 
 > 使用私有仓库预先下载镜像文件：`docker pull klr.io:6789/gradle:5.4.1-jdk8-alpine`，同时需要开放必要的端口以便Jenkins能够访问（如私有仓库的相应下载端口）。
 
-将Gradle官方镜像中的内容拷贝到MySQL基础镜像之中，构建后推送到私有仓库便能在流水线中使用，具体参见[Dockerfile](docker/Dockerfile-gradle-mysql)。
+将Gradle官方镜像中的内容拷贝到MySQL基础镜像之中，构建后推送到私有仓库便能在流水线中使用，具体参见[Dockerfile](docker/Dockerfile-gradle-mysql)。注意`CMD`命令，不能覆盖原有MySQL的设置，因此需要将Gradle镜像中的`CMD`命令删除。
 
 ## Jenkinsfile
 

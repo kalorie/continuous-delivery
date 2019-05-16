@@ -50,7 +50,7 @@ RUN set -ex; \
     update-alternatives --query java | grep -q 'Status: manual'
 
 # Install Gradle, copied from gradle:jdk8-slim
-CMD ["gradle"]
+# CMD ["gradle"]
 
 ENV GRADLE_HOME /opt/gradle
 ENV GRADLE_VERSION 5.4.1

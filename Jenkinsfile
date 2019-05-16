@@ -4,6 +4,7 @@ pipeline {
     agent {
         docker {
             image 'gradle-mysql:latest'
+            args "-u root"
         }
     }
 
@@ -16,7 +17,8 @@ pipeline {
         stage("Smoke") {
             steps {
                 sh 'gradle --version'
-                sh 'ls .'
+                sh "java --version"
+                sh 'ls -lh'
             }
         }
     }
