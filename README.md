@@ -22,7 +22,7 @@ install-plugins.sh gradle
 
 将Gradle官方镜像中的内容拷贝到MySQL基础镜像之中，构建后推送到私有仓库便能在流水线中使用，具体参见[Dockerfile](docker/Dockerfile-gradle-mysql)。注意`CMD`命令，不能覆盖原有MySQL的设置，因此需要将Gradle镜像中的`CMD`命令删除。
 
-为了能够缓存Gradle数据，还需要增加参数`-v $HOME/.gradle:/home/gradle/.gradle`。
+为了能够缓存Gradle数据，还需要增加参数`-v gradle-cache:/home/gradle/.gradle`。
 
 ## Jenkinsfile
 

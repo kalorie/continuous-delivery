@@ -4,7 +4,7 @@ pipeline {
     agent {
         docker {
             image 'gradle-mysql:latest'
-            args "-u root -v $HOME/.gradle:/home/gradle/.gradle"
+            args "-u root -v gradle-cache:/home/gradle/.gradle"
         }
     }
 
