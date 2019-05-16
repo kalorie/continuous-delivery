@@ -3,12 +3,17 @@
 pipeline {
     agent {
         docker {
-            image 'gradle:5.4.1-jdk8-alpine'
+            image 'klr.io:6789/gradle:5.4.1-jdk8-alpine'
         }
     }
 
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '3'))
+        timestamps()
+    }
+
     stages {
-	stage("Smoke") {
+        stage("Smoke") {
             steps {
                 sh 'gradle --version'
             }
