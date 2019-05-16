@@ -21,7 +21,7 @@ pipeline {
     stages {
         stage("Build") {
             steps {
-                sh 'gradle clean test -Dspring.profiles.active=local'
+                sh 'gradle clean test -Dspring.profiles.active=local --info'
             }
         }
     }
