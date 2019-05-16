@@ -29,7 +29,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'gradle clean test -Dspring.profiles.active=local --info'
+                sh 'gradle clean test -Dinternet -Dspring.profiles.active=local --info'
             }
             post {
                 always {
