@@ -16,6 +16,7 @@ pipeline {
         stage("Smoke") {
             steps {
                 sh 'gradle --version'
+                sh 'ls .'
             }
         }
     }
