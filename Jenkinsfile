@@ -1,17 +1,7 @@
 #!/usr/bin/env groovy
 
 pipeline {
-    environment {
-        ROOT_PASSWORD = "root"
-        DATABASE = "test"
-    }
-
-    agent {
-        docker {
-            image 'gradle-mysql:latest'
-            args "-u root -v gradle-cache:/home/gradle/.gradle -e MYSQL_ROOT_PASSWORD=${env.ROOT_PASSWORD} -e MYSQL_DATABASE=${env.DATABASE}"
-        }
-    }
+    agent none
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '3'))
@@ -19,10 +9,30 @@ pipeline {
     }
 
     stages {
-        stage("Build") {
+        stage("Update submodules") {
             steps {
-                sh "git submodule update --init"
+                sh 'git submodule update --init'
+            }
+        }
+
+        stage("Build") {
+            environment {
+                ROOT_PASSWORD = "root"
+                DATABASE = "test"
+            }
+            agent {
+                docker {
+                    image 'gradle-mysql:latest'
+                    args "-u root -v gradle-cache:/home/gradle/.gradle -e MYSQL_ROOT_PASSWORD=${env.ROOT_PASSWORD} -e MYSQL_DATABASE=${env.DATABASE}"
+                }
+            }
+            steps {
                 sh 'gradle clean test -Dspring.profiles.active=local --info'
+            }
+            post {
+                always {
+                    junit "build/test-results/*.xml"
+                }
             }
         }
     }
