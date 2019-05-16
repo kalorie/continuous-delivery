@@ -3,7 +3,7 @@
 pipeline {
     agent {
         docker {
-            image 'klr.io:6789/gradle:5.4.1-jdk8-alpine'
+            image 'gradle-mysql:latest'
         }
     }
 
