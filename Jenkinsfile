@@ -10,6 +10,8 @@ pipeline {
 
     stages {
         stage("Update submodules") {
+            agent any
+
             steps {
                 sh 'git submodule update --init'
             }
