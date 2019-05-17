@@ -5,10 +5,7 @@ pipeline {
 
     environment {
         MYSQL_NETWORK = "mysqlnet"
-    }
-
-    docker {
-        withRegistry("https://klr.io:6789")
+        DOCKER_REGISTRY = "https://klr.io:6789/"
     }
 
     options {
@@ -37,6 +34,7 @@ pipeline {
             }
             agent {
                 docker {
+                    registryUrl "${env.DOCKER_REGISTRY}"
                     image "mysql:5.7"
                     args "-u root --rm --network ${env.MYSQL_NETWORK} --ip ${env.IP} -e MYSQL_ROOT_PASSWORD=${env.ROOT_PASSWORD} -e MYSQL_DATABASE=${env.DATABASE}"
                 }
@@ -49,6 +47,7 @@ pipeline {
         stage("Build") {
             agent {
                 docker {
+                    registryUrl "${env.DOCKER_REGISTRY}"
                     image 'gradle:5.4.1-jdk8-alpine'
                     args "-v gradle-cache:/home/gradle/.gradle"
                 }
