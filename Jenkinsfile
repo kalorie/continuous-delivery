@@ -10,7 +10,10 @@ pipeline {
     stages {
         stage("React") {
             steps {
-                sh "Reacted based on the upstreams at $(date)"
+                script {
+                    def now = new Date()
+                    println "Reacted from the upstreams at ${now}"
+                }
             }
         }
     }
