@@ -43,7 +43,7 @@ pipeline {
                 docker {
                     registryUrl "${params.REGISTRY_URL}"
                     image 'gradle:5.4.1-jdk8-alpine'
-                    args "-v gradle-cache:/home/gradle/.gradle"
+                    args "-v gradle-cache:/home/gradle/.gradle --network ${params.MYSQL_NETWORK}"
                 }
             }
             steps {
