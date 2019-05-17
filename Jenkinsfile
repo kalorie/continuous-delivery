@@ -4,7 +4,7 @@ pipeline {
     agent any
 
     triggers {
-        upstream(upstreamProjects: "continuous-delivery/simple", threshold: hudson.model.Result.SUCCESS)
+        upstream(upstreamProjects: "react/simple", threshold: hudson.model.Result.SUCCESS)
     }
 
     stages {
