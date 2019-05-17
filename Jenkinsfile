@@ -27,6 +27,7 @@ pipeline {
 
         stage("Create MySQL network") {
             steps {
+                sh "docker network rm ${params.MYSQL_NETWORK}"
                 sh "docker network create --subnet=${params.SUBNET} ${params.MYSQL_NETWORK}"
             }
         }
@@ -58,8 +59,8 @@ pipeline {
 
     post {
         always {
-            sh "docker stop ${params.MYSQL_CONTAINER}"
-            sh "docker rm ${params.MYSQL_CONTAINER}"
+            sh "docker stop --time=1 ${params.MYSQL_CONTAINER}"
+            sh "docker rm --force ${params.MYSQL_CONTAINER}"
             sh "docker network rm ${params.MYSQL_NETWORK}"
         }
     }
