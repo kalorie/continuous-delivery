@@ -5,7 +5,8 @@ pipeline {
 
     parameters {
         string(name: "MYSQL_NETWORK", defaultValue: "mysqlnet")
-        string(name: "DOCKER_REGISTRY", defaultValue: "https://klr.io:6789/")
+        string(name: "REGISTRY_URL", defaultValue: "https://klr.io:6789")
+        string(name: "DOCKER_REGISTRY", defaultValue: "klr.io:6789")
         string(name: "ROOT_PASSWORD", defaultValue: "root")
         string(name: "DATABASE", defaultValue: "test")
         string(name: "IP", defaultValue: "172.16.0.10")
@@ -33,14 +34,14 @@ pipeline {
 
         stage("Start MySQL") {
             steps {
-                sh "docker run -u root -d --name ${params.MYSQL_CONTAINER} --rm --network ${params.MYSQL_NETWORK} --ip ${params.IP} -e MYSQL_ROOT_PASSWORD=${params.ROOT_PASSWORD} -e MYSQL_DATABASE=${params.DATABASE} ${params.DOCKER_REGISTRY}mysql:5.7"
+                sh "docker run -u root -d --name ${params.MYSQL_CONTAINER} --rm --network ${params.MYSQL_NETWORK} --ip ${params.IP} -e MYSQL_ROOT_PASSWORD=${params.ROOT_PASSWORD} -e MYSQL_DATABASE=${params.DATABASE} ${params.DOCKER_REGISTRY}/mysql:5.7"
             }
         }
 
         stage("Build") {
             agent {
                 docker {
-                    registryUrl "${params.DOCKER_REGISTRY}"
+                    registryUrl "${params.REGISTRY_URL}"
                     image 'gradle:5.4.1-jdk8-alpine'
                     args "-v gradle-cache:/home/gradle/.gradle"
                 }
