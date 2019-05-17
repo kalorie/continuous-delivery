@@ -22,6 +22,8 @@ pipeline {
         }
 
         stage("Create MySQL network") {
+            agent any
+
             steps {
                 sh "docker network create ${env.MYSQL_NETWORK}"
             }
@@ -33,9 +35,11 @@ pipeline {
                 DATABASE = "test"
                 IP = "172.16.0.10"
             }
-            docker {
-                image "klr.io:6789/mysql:5.7"
-                args "-u root --rm --network ${env.MYSQL_NETWORK} --ip ${env.IP} -e MYSQL_ROOT_PASSWORD=${env.ROOT_PASSWORD} -e MYSQL_DATABASE=${env.DATABASE}"
+            agent {
+                docker {
+                    image "klr.io:6789/mysql:5.7"
+                    args "-u root --rm --network ${env.MYSQL_NETWORK} --ip ${env.IP} -e MYSQL_ROOT_PASSWORD=${env.ROOT_PASSWORD} -e MYSQL_DATABASE=${env.DATABASE}"
+                }
             }
         }
 
