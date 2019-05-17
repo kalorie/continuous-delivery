@@ -22,7 +22,7 @@ pipeline {
 
         stage("Create MySQL network") {
             steps {
-                sh "docker network create --subnet=172.16.0.0/16 ${env.MYSQL_NETWORK}"
+                sh "docker network create --subnet=172.16.0.0/16 $MYSQL_NETWORK"
             }
         }
 
@@ -34,9 +34,9 @@ pipeline {
             }
             agent {
                 docker {
-                    registryUrl "${env.DOCKER_REGISTRY}"
+                    registryUrl "$DOCKER_REGISTRY"
                     image "mysql:5.7"
-                    args "-u root --rm --network ${env.MYSQL_NETWORK} --ip ${env.IP} -e MYSQL_ROOT_PASSWORD=${env.ROOT_PASSWORD} -e MYSQL_DATABASE=${env.DATABASE}"
+                    args "-u root --rm --network $MYSQL_NETWORK --ip $IP -e MYSQL_ROOT_PASSWORD=$ROOT_PASSWORD -e MYSQL_DATABASE=$DATABASE"
                 }
             }
             steps {
@@ -47,7 +47,7 @@ pipeline {
         stage("Build") {
             agent {
                 docker {
-                    registryUrl "${env.DOCKER_REGISTRY}"
+                    registryUrl "$DOCKER_REGISTRY"
                     image 'gradle:5.4.1-jdk8-alpine'
                     args "-v gradle-cache:/home/gradle/.gradle"
                 }
@@ -65,7 +65,7 @@ pipeline {
 
     post {
         always {
-            sh "docker network rm ${env.MYSQL_NETWORK}"
+            sh "docker network rm $MYSQL_NETWORK"
         }
     }
 }
