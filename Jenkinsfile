@@ -41,6 +41,9 @@ pipeline {
                     args "-u root --rm --network ${env.MYSQL_NETWORK} --ip ${env.IP} -e MYSQL_ROOT_PASSWORD=${env.ROOT_PASSWORD} -e MYSQL_DATABASE=${env.DATABASE}"
                 }
             }
+            steps {
+                echo "Started MySQL..."
+            }
         }
 
         stage("Build") {
