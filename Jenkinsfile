@@ -52,7 +52,7 @@ pipeline {
                 }
             }
             steps {
-                sh "gradle clean test -Dinternet -Dspring.profiles.active=integration-test --info"
+                sh "gradle clean test -Dinternet -Dspring.profiles.active=integration-test"
             }
             post {
                 always {
