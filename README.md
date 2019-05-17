@@ -71,4 +71,4 @@ docker {
 
 ## 触发构建
 
-使用
+如果都能通过外网访问，则推荐使用Webhook；如果是Git hooks，则需要考虑Windows机器下的脚本执行问题。
