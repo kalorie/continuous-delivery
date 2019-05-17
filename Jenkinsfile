@@ -4,13 +4,13 @@ pipeline {
     agent any
 
     triggers {
-        upstream(upstreamProjects: 'continuous-delivery', threshold: hudson.model.Result.SUCCESS)
+        upstream(upstreamProjects: "continuous-delivery", threshold: hudson.model.Result.SUCCESS)
     }
 
     stages {
-        stage('React') {
+        stage("React") {
             steps {
-                sh 'Reacted based on the upstreams at $(date)'
+                sh "Reacted based on the upstreams at $(date)"
             }
         }
     }
