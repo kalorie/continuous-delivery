@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 pipeline {
-    agent none
+    agent any
 
     environment {
         MYSQL_NETWORK = "mysqlnet"
@@ -14,18 +14,13 @@ pipeline {
 
     stages {
         stage("Update submodules") {
-            agent any
-
             steps {
                 sh 'git submodule update --init'
             }
         }
 
         stage("Create MySQL network") {
-            agent any
-
             steps {
-                sh "docker network rm ${env.MYSQL_NETWORK}"
                 sh "docker network create ${env.MYSQL_NETWORK}"
             }
         }
@@ -60,9 +55,14 @@ pipeline {
             post {
                 always {
                     junit "build/test-results/**/*.xml"
-                    sh "docker network rm ${env.MYSQL_NETWORK}"
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            sh "docker network rm ${env.MYSQL_NETWORK}"
         }
     }
 }
