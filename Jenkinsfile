@@ -22,7 +22,7 @@ pipeline {
 
         stage("Create MySQL network") {
             steps {
-                sh "docker network create ${env.MYSQL_NETWORK}"
+                sh "docker network create --subnet=172.16.0.0/16 ${env.MYSQL_NETWORK}"
             }
         }
 
