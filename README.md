@@ -4,7 +4,7 @@
 
 重点在于需要使用Docker，并结合Jenkins进行相关构建和测试，目标是每次代码提交将自动触发构建任务。
 
-# 步骤
+# 步骤以及相关问题
 
 ## 安装Gradle插件
 
@@ -61,6 +61,14 @@ git submodule update --init
 docker {
     reuseNode true
 }
+```
+
+## 字符串引号以及验证问题
+
+为了能够使用Jenkins API验证`Jenkinsfile`，建议统一使用单引号或者双引号表示字符串，不要混合使用，因为调用API时需要读取文件文件内容：
+
+```
+curl -X POST -F "jenkinsfile=$(cat /opt/Jenkinsfile)" -u admin:admin http://192.168.0.5:8080/pipeline-model-converter/validate
 ```
 
 ## 创建流水线
