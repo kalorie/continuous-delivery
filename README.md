@@ -29,9 +29,9 @@ install-plugins.sh gradle
 
 为了能够缓存Gradle数据，还需要增加参数`-v gradle-cache:/home/gradle/.gradle`。
 
-## 主机DNS设置
+## 容器自动退出问题
 
-
+在`docker`类型的`agent`内执行完操作之后，该容器会自动退出和删除，因此无法应用到下一个stage，对于MySQL容器的情形，就不能简单地将其作为一个独立的容器运行而后在后续stage中连接使用，只能通过`sh`手工启动和关闭，以便后续stage使用。
 
 ## 数据库网络设置
 

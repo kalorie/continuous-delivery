@@ -10,6 +10,7 @@ pipeline {
         string(name: "DATABASE", defaultValue: "test")
         string(name: "IP", defaultValue: "172.16.0.10")
         string(name: "SUBNET", defaultValue: "172.16.0.0/16")
+        string(name: "MYSQL_CONTAINER", defaultValue: "mysql")
     }
 
     options {
@@ -31,15 +32,8 @@ pipeline {
         }
 
         stage("Start MySQL") {
-            agent {
-                docker {
-                    registryUrl "${params.DOCKER_REGISTRY}"
-                    image "mysql:5.7"
-                    args "-u root --rm --network ${params.MYSQL_NETWORK} --ip ${params.IP} -e MYSQL_ROOT_PASSWORD=${params.ROOT_PASSWORD} -e MYSQL_DATABASE=${params.DATABASE}"
-                }
-            }
             steps {
-                echo "Started MySQL..."
+                sh "-u root -d --name ${params.MYSQL_CONTAINER} --rm --network ${params.MYSQL_NETWORK} --ip ${params.IP} -e MYSQL_ROOT_PASSWORD=${params.ROOT_PASSWORD} -e MYSQL_DATABASE=${params.DATABASE} ${params.DOCKER_REGISTRY}mysql:5.7"
             }
         }
 
@@ -64,6 +58,8 @@ pipeline {
 
     post {
         always {
+            sh "docker stop ${params.MYSQL_CONTAINER}"
+            sh "docker rm ${params.MYSQL_CONTAINER}"
             sh "docker network rm ${params.MYSQL_NETWORK}"
         }
     }
