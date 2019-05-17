@@ -49,11 +49,19 @@ git submodule update --init
 
 ## 工具
 
-可以在Jenkins的全局工具配置中配置构建所需要的各类工具，如Git和Gradle等，而无需混合不同的镜像，上述Gradle容器也可以用此功能代替。
+可以在Jenkins的全局工具配置中配置构建所需要的各类工具，如Git和Gradle等，而无需混合不同的镜像，上述Gradle容器也可以用此功能代替。但仍需注意的是即便配置了全局工具，在容器中也将无法使用。
 
 ## 工作空间
 
 不同stage的工作空间并不相同，以`workspace@<num>`的形式命名，因此即便在第一步更新了子模块，第二步中的工作空间仍然无法看到。
+
+可以通过设置`reuseNode`修改：
+
+```
+docker {
+    reuseNode true
+}
+```
 
 ## 创建流水线
 

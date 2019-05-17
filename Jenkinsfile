@@ -24,6 +24,12 @@ pipeline {
     }
 
     stages {
+        stage("Update submodules") {
+            steps {
+                sh 'git submodule update --init'
+            }
+        }
+
         stage("Create MySQL network") {
             steps {
                 sh "docker network create --subnet=${params.SUBNET} ${params.MYSQL_NETWORK} || true"
@@ -42,10 +48,10 @@ pipeline {
                     registryUrl "${params.REGISTRY_URL}"
                     image 'gradle:5.4.1-jdk8-alpine'
                     args "-v gradle-cache:/home/gradle/.gradle --network ${params.MYSQL_NETWORK}"
+                    reuseNode true
                 }
             }
             steps {
-                sh "git submodule update --init"
                 sh 'gradle clean test -Dinternet -Dspring.profiles.active=integration-test --info'
             }
             post {
