@@ -34,7 +34,7 @@ pipeline {
             }
             agent {
                 docker {
-                    registryUrl "${env.DOCKER_REGISTRY}"
+                    // registryUrl "${env.DOCKER_REGISTRY}"
                     image "mysql:5.7"
                     args "-u root --rm --network ${env.MYSQL_NETWORK} --ip ${env.IP} -e MYSQL_ROOT_PASSWORD=${env.ROOT_PASSWORD} -e MYSQL_DATABASE=${env.DATABASE}"
                 }
