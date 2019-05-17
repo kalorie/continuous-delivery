@@ -7,6 +7,10 @@ pipeline {
         MYSQL_NETWORK = "mysqlnet"
     }
 
+    docker {
+        withRegistry("https://klr.io:6789")
+    }
+
     options {
         buildDiscarder(logRotator(numToKeepStr: '3'))
         timestamps()
@@ -33,7 +37,7 @@ pipeline {
             }
             agent {
                 docker {
-                    image "klr.io:6789/mysql:5.7"
+                    image "mysql:5.7"
                     args "-u root --rm --network ${env.MYSQL_NETWORK} --ip ${env.IP} -e MYSQL_ROOT_PASSWORD=${env.ROOT_PASSWORD} -e MYSQL_DATABASE=${env.DATABASE}"
                 }
             }
@@ -45,7 +49,7 @@ pipeline {
         stage("Build") {
             agent {
                 docker {
-                    image 'klr.io:6789/gradle:5.4.1-jdk8-alpine'
+                    image 'gradle:5.4.1-jdk8-alpine'
                     args "-v gradle-cache:/home/gradle/.gradle"
                 }
             }
