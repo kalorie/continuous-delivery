@@ -59,9 +59,14 @@ pipeline {
             post {
                 always {
                     junit "build/test-results/**/*.xml"
-                    sh "docker network rm ${env.MYSQL_NETWORK}"
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            sh "docker network rm ${env.MYSQL_NETWORK}"
         }
     }
 }
