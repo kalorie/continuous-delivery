@@ -3,6 +3,10 @@
 pipeline {
     agent any
 
+    tools {
+        git "Default"
+    }
+
     parameters {
         string(name: "MYSQL_NETWORK", defaultValue: "mysqlnet")
         string(name: "REGISTRY_URL", defaultValue: "https://klr.io:6789")
@@ -20,12 +24,6 @@ pipeline {
     }
 
     stages {
-        stage("Update submodules") {
-            steps {
-                sh 'git submodule update --init'
-            }
-        }
-
         stage("Create MySQL network") {
             steps {
                 sh "docker network create --subnet=${params.SUBNET} ${params.MYSQL_NETWORK} || true"
@@ -47,6 +45,7 @@ pipeline {
                 }
             }
             steps {
+                sh "git submodule update --init"
                 sh 'gradle clean test -Dinternet -Dspring.profiles.active=integration-test --info'
             }
             post {

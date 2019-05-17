@@ -47,6 +47,14 @@ install-plugins.sh gradle
 git submodule update --init
 ```
 
+## 工具
+
+可以在Jenkins的全局工具配置中配置构建所需要的各类工具，如Git和Gradle等，而无需混合不同的镜像，上述Gradle容器也可以用此功能代替。
+
+## 工作空间
+
+不同stage的工作空间并不相同，以`workspace@<num>`的形式命名，因此即便在第一步更新了子模块，第二步中的工作空间仍然无法看到。
+
 ## 创建流水线
 
 在Blue Ocean中直接创建，选择Git或者GitHub输入相应仓库地址即可（需要包含`Jenkinsfile`文件）。
@@ -55,6 +63,4 @@ git submodule update --init
 
 ## 触发构建
 
-# 源代码更新
-
-实现流水线之后，源代码中原来针对不同环境的配置文件可以删除，如`integration-test`相关配置文件。
+使用
