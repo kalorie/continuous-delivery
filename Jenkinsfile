@@ -3,9 +3,13 @@
 pipeline {
     agent any
 
-    environment {
-        MYSQL_NETWORK = "mysqlnet"
-        DOCKER_REGISTRY = "https://klr.io:6789/"
+    parameters {
+        string(name: "MYSQL_NETWORK", defaultValue: "mysqlnet")
+        string(name: "DOCKER_REGISTRY", defaultValue: "https://klr.io:6789/")
+        string(name: "ROOT_PASSWORD", defaultValue: "root")
+        string(name: "DATABASE", defaultValue: "test")
+        string(name: "IP", defaultValue: "172.16.0.10")
+        string(name: "SUBNET", defaultValue: "172.16.0.0/16")
     }
 
     options {
@@ -22,21 +26,16 @@ pipeline {
 
         stage("Create MySQL network") {
             steps {
-                sh "docker network create --subnet=172.16.0.0/16 $MYSQL_NETWORK"
+                sh "docker network create --subnet=${params.SUBNET} ${params.MYSQL_NETWORK}"
             }
         }
 
         stage("Start MySQL") {
-            environment {
-                ROOT_PASSWORD = "root"
-                DATABASE = "test"
-                IP = "172.16.0.10"
-            }
             agent {
                 docker {
-                    registryUrl "$DOCKER_REGISTRY"
+                    registryUrl "${params.DOCKER_REGISTRY}"
                     image "mysql:5.7"
-                    args "-u root --rm --network $MYSQL_NETWORK --ip $IP -e MYSQL_ROOT_PASSWORD=$ROOT_PASSWORD -e MYSQL_DATABASE=$DATABASE"
+                    args "-u root --rm --network ${params.MYSQL_NETWORK} --ip ${params.IP} -e MYSQL_ROOT_PASSWORD=${params.ROOT_PASSWORD} -e MYSQL_DATABASE=${params.DATABASE}"
                 }
             }
             steps {
@@ -47,7 +46,7 @@ pipeline {
         stage("Build") {
             agent {
                 docker {
-                    registryUrl "$DOCKER_REGISTRY"
+                    registryUrl "${params.DOCKER_REGISTRY}"
                     image 'gradle:5.4.1-jdk8-alpine'
                     args "-v gradle-cache:/home/gradle/.gradle"
                 }
@@ -65,7 +64,7 @@ pipeline {
 
     post {
         always {
-            sh "docker network rm $MYSQL_NETWORK"
+            sh "docker network rm ${params.MYSQL_NETWORK}"
         }
     }
 }
