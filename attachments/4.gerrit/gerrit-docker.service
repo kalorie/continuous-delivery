@@ -1,0 +1,11 @@
+[Unit]
+Description=Gerrit Code Review
+After=docker.service
+Requires=docker.service
+
+[Service]
+ExecStartPre=-/bin/docker run -d --name gerrit -p 9090:8080 -p 29418:29418 -v gerrit-etc:/var/gerrit/etc -v gerrit-git:/var/gerrit/git -v gerrit-db:/var/gerrit/db -v gerrit-index:/var/gerrit/index -v gerrit-cache:/var/gerrit/cache -d gerritcodereview/gerrit
+ExecStart=/bin/docker start gerrit
+
+[Install]
+WantedBy=multi-user.target
