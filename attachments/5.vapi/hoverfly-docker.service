@@ -1,0 +1,11 @@
+[Unit]
+Description=Hoverfly
+After=docker.service
+Requires=docker.service
+
+[Service]
+ExecStartPre=-/bin/docker run -d --name hoverfly -p 8888:8888 -p 8500:8500 spectolabs/hoverfly
+ExecStart=/bin/docker start hoverfly
+
+[Install]
+WantedBy=multi-user.target
