@@ -14,9 +14,10 @@ public class ExternalHoverflyTimingServiceTest {
     public void init() {
         ts = new TimingService();
         ts.setUrl("http://time.jsontest.com/");
-        System.setProperty("proxySet", String.valueOf(true));
-        System.setProperty("http.proxyHost", "localhost");
-        System.setProperty("http.proxyPort", String.valueOf(8500));
+        // Better set during starting process to cooperate with Jenkins CI
+        // System.setProperty("proxySet", String.valueOf(true));
+        // System.setProperty("http.proxyHost", "localhost");
+        // System.setProperty("http.proxyPort", String.valueOf(8500));
     }
 
     @Test
