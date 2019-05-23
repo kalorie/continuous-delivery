@@ -49,6 +49,7 @@ pipeline {
                 stage("Start Hoverfly") {
                     steps {
                         sh "docker run -d --name ${params.HOVERFLY_CONTAINER} --rm --network ${params.MYSQL_NETWORK} --ip ${params.HOVERFLY_IP} -p 8500:8500 -p 8888:8888 ${params.DOCKER_REGISTRY}/spectolabs/hoverfly:v1.0.0 -listen-on-host 0.0.0.0"
+                        sh "docker run -v $WORKSPACE/src/test/resources:/hoverfly --rm --network ${params.MYSQL_NETWORK} ${params.DOCKER_REGISTRY}/appropriate/curl -X PUT -d @/hoverfly/timing.json ${params.HOVERFLY_IP}:8888/api/v2/simulation"
                     }
                 }
             }
@@ -65,7 +66,7 @@ pipeline {
             }
             steps {
                 timeout(time: 3, unit: "MINUTES") {
-                    sh "gradle clean importHoverflyData test -Dinternet -Dspring.profiles.active=integration-test -DproxySet=true -Dhttp.proxyHost=${params.HOVERFLY_IP} -Dhttp.proxyPort=8500"
+                    sh "gradle clean test -Dinternet -Dspring.profiles.active=integration-test -DproxySet=true -Dhttp.proxyHost=${params.HOVERFLY_IP} -Dhttp.proxyPort=8500"
                 }
             }
             post {
