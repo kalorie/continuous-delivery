@@ -48,7 +48,7 @@ pipeline {
 
                 stage("Start Hoverfly") {
                     steps {
-                        sh "docker run -d --name ${params.HOVERFLY_CONTAINER} --rm --network ${params.MYSQL_NETWORK} --ip ${params.HOVERFLY_IP} -p 8500:8500 -p 8888:8888 ${params.DOCKER_REGISTRY}/hoverfly:latest"
+                        sh "docker run -d --name ${params.HOVERFLY_CONTAINER} --rm --network ${params.MYSQL_NETWORK} --ip ${params.HOVERFLY_IP} -p 8500:8500 -p 8888:8888 ${params.DOCKER_REGISTRY}/spectolabs/hoverfly:v1.0.0"
                     }
                 }
             }
