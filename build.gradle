@@ -74,6 +74,5 @@ task importHoverflyData {
     def config = HoverflyConfig.remoteConfigs()
     config.host(host)
     def hoverfly = new Hoverfly(config, HoverflyMode.SIMULATE)
-    hoverfly.start()
     hoverfly.simulate(SimulationSource.file(file("src/test/resources/timing.json").toPath()))
 }
