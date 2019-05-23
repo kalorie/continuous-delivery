@@ -70,6 +70,7 @@ task importHoverflyData {
     if (host == null || "" == host.trim()) {
         host = "localhost"
     }
+    println "-------${java.net.InetAddress.getLocalHost()}"
     def config = HoverflyConfig.remoteConfigs()
     config.host(host)
     def hoverfly = new Hoverfly(config, HoverflyMode.SIMULATE)
