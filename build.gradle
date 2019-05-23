@@ -70,6 +70,7 @@ task importHoverflyData {
     if (host == null) {
         host = "localhost"
     }
+    println "----${host}----"
     def config = HoverflyConfig.remoteConfigs()
     config.host(host)
     def hoverfly = new Hoverfly(config, HoverflyMode.SIMULATE)
