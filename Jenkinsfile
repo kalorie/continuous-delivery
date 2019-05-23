@@ -65,7 +65,7 @@ pipeline {
             }
             steps {
                 timeout(time: 3, unit: "MINUTES") {
-                    sh "gradle clean importHoverflyData test -DhoverflyHost=${params.HOVERFLY_IP} -Dinternet -Dspring.profiles.active=integration-test -DproxySet=true -Dhttp.proxyHost=${params.HOVERFLY_IP} -Dhttp.proxyPort=8500"
+                    sh "gradle clean importHoverflyData test -Dinternet -Dspring.profiles.active=integration-test -DproxySet=true -Dhttp.proxyHost=${params.HOVERFLY_IP} -Dhttp.proxyPort=8500"
                 }
             }
             post {

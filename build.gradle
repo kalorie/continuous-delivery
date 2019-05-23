@@ -66,11 +66,10 @@ test {
 import io.specto.hoverfly.junit.core.*
 
 task importHoverflyData {
-    def host = System.properties.hoverflyHost
-    if (host == null) {
+    def host = System.properties."http.proxyHost"
+    if (host == null || "" == host.trim()) {
         host = "localhost"
     }
-    println "----${host}----"
     def config = HoverflyConfig.remoteConfigs()
     config.host(host)
     def hoverfly = new Hoverfly(config, HoverflyMode.SIMULATE)
