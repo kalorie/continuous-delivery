@@ -16,6 +16,8 @@ pipeline {
         string(name: "IP", defaultValue: "172.16.0.10")
         string(name: "SUBNET", defaultValue: "172.16.0.0/16")
         string(name: "MYSQL_CONTAINER", defaultValue: "mysql")
+        string(name: "HOVERFLY_CONTAINER", defaultValue: "hoverfly")
+        string(name: "HOVERFLY_IP", defaultValue: "172.16.0.12")
     }
 
     options {
@@ -36,9 +38,19 @@ pipeline {
             }
         }
 
-        stage("Start MySQL") {
-            steps {
-                sh "docker run -u root -d --name ${params.MYSQL_CONTAINER} --rm --network ${params.MYSQL_NETWORK} --ip ${params.IP} -e MYSQL_ROOT_PASSWORD=${params.ROOT_PASSWORD} -e MYSQL_DATABASE=${params.DATABASE} ${params.DOCKER_REGISTRY}/mysql:5.7"
+        stage("Start external processes") {
+            parallel {
+                stage("Start MySQL") {
+                    steps {
+                        sh "docker run -u root -d --name ${params.MYSQL_CONTAINER} --rm --network ${params.MYSQL_NETWORK} --ip ${params.IP} -e MYSQL_ROOT_PASSWORD=${params.ROOT_PASSWORD} -e MYSQL_DATABASE=${params.DATABASE} ${params.DOCKER_REGISTRY}/mysql:5.7"
+                    }
+                }
+
+                stage("Start Hoverfly") {
+                    steps {
+                        sh "docker run -d --name ${params.HOVERFLY_CONTAINER} --rm --network ${params.MYSQL_NETWORK} --ip ${params.HOVERFLY_IP} -p 8500:8500 -p 8888:8888 ${params.DOCKER_REGISTRY}/hoverfly:latest"
+                    }
+                }
             }
         }
 
@@ -52,7 +64,7 @@ pipeline {
                 }
             }
             steps {
-                sh "gradle clean test -Dinternet -Dspring.profiles.active=integration-test"
+                sh "gradle clean test -Dinternet -Dspring.profiles.active=integration-test -DproxySet=true -Dhttp.proxyHost=${params.HOVERFLY_IP} -Dhttp.proxyPort=8500"
             }
             post {
                 always {
@@ -65,6 +77,7 @@ pipeline {
     post {
         always {
             sh "docker stop --time=1 ${params.MYSQL_CONTAINER} || true && docker rm -f ${params.MYSQL_CONTAINER} || true"
+            sh "docker stop --time=1 ${params.HOVERFLY_CONTAINER} || true && docker rm -f ${params.HOVERFLY_CONTAINER} || true"
             sh "docker network rm ${params.MYSQL_NETWORK}"
         }
     }
