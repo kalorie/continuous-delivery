@@ -13,6 +13,7 @@ buildscript {
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath "org.flywaydb:flyway-gradle-plugin:${flywayVersion}"
+        classpath "io.specto:hoverfly-java:0.12.0"
     }
 }
 
@@ -60,4 +61,18 @@ bootJar {
 
 test {
     systemProperty "spring.profiles.active", System.properties."spring.profiles.active"
+}
+
+import io.specto.hoverfly.junit.core.*
+
+task importHoverflyData {
+    def host = System.properties.hoverflyHost
+    if (host == null) {
+        host = "localhost"
+    }
+    def config = HoverflyConfig.remoteConfigs()
+    config.host(host)
+    def hoverfly = new Hoverfly(config, HoverflyMode.SIMULATE)
+    hoverfly.start()
+    hoverfly.simulate(SimulationSource.file(file("src/test/resources/timing.json").toPath()))
 }

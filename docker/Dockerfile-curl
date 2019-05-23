@@ -1,0 +1,4 @@
+FROM klr.io:6789/alpine:3.9
+LABEL maintainer="KLR <prefix614@gmail.com>"
+
+RUN apk add --no-cache curl
