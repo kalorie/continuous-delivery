@@ -64,16 +64,3 @@ bootJar {
 test {
     systemProperty "spring.profiles.active", System.properties."spring.profiles.active"
 }
-
-import io.specto.hoverfly.junit.core.*
-
-task importHoverflyData {
-    def host = System.properties."http.proxyHost"
-    if (host == null || "" == host.trim()) {
-        host = "localhost"
-    }
-    def config = HoverflyConfig.remoteConfigs()
-    config.host(host)
-    def hoverfly = new Hoverfly(config, HoverflyMode.SIMULATE)
-    hoverfly.simulate(SimulationSource.file(file("src/test/resources/timing.json").toPath()))
-}
