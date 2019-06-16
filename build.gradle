@@ -14,12 +14,14 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath "org.flywaydb:flyway-gradle-plugin:${flywayVersion}"
         classpath "io.specto:hoverfly-java:0.12.0"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7.1"
     }
 }
 
 apply plugin: "org.springframework.boot"
 apply plugin: "io.spring.dependency-management"
 apply plugin: "org.flywaydb.flyway"
+apply plugin: "org.sonarqube"
 
 group "io.klr.ci"
 version "1.0-SNAPSHOT"
